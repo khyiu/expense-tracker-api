@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: Grocery Tracker API
+  description: Definition of available methods to interact with the Grocery Tracker application back-end.
+  version: 1.0.0-SNAPSHOT
+servers:
+  - url: 'http://grocery-tracker-back-8.eu-central-1.elasticbeanstalk.com/'
+    description: Production environment
+paths:
+  /shops:
+    get:
+      summary: Get existing shops
+      description: Retrieve a list of the shops in which grocery lines have been previsously registered
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Shop'
+          description: List of existing shops
+  /grocery-lines:
+    post:
+      summary: Registers a grocery line.
+      description: Registers a grocery item that has been shopped, along with information such as descriptions tags, sales unit and price.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroceryLineRequest'
+      responses:
+        201:
+          description: Grocery line has been properly registered
+components:
+  schemas:
+    SalesUnit:
+      type: object
+      properties:
+        salesUnitType:
+          type: string
+        quantityPerUnit:
+          type: number
+        nbUnitPerPackage:
+          type: number
+          default: 1
+      required:
+        - salesUnitType
+        - quantity
+      discriminator:
+        propertyName: salesUnitType
+        mapping:
+          weight: '#/components/schemas/WeightSalesUnit'
+    WeightSalesUnit:
+      allOf:
+        - $ref: '#/components/schemas/SalesUnit'
+        - type: object
+          properties:
+            weightUnit:
+              type: string
+              enum: [g, kg]
+          required:
+            - weightUnit
+    VolumeSalesUnit:
+      allOf:
+        - $ref: '#/components/schemas/SalesUnit'
+        - type: object
+          properties:
+            volumeUnit:
+              type: string
+              enum: [ml, cl, l]
+          required:
+            - volumeUnit
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+        brand:
+          type: string
+        locationTag:
+          type: string
+      required:
+        - brand
+        - location
+    GroceryLineRequest:
+      description: Request object representing the grocery line to be registered in the application
+      type: object
+      properties:
+        date:
+          type: string
+          pattern: 'dddd-dd-dd'
+        shop:
+          $ref: '#/components/schemas/Shop'
+        brand:
+          type: string
+        descriptionTags:
+          type: array
+          items:
+            type: string
+          minimum: 1
+        unitPrice:
+          type: number
+        unitType:
+          oneOf:
+            - $ref: '#/components/schemas/WeightSalesUnit'
+            - $ref: '#/components/schemas/VolumeSalesUnit'
+      required:
+        - date
+        - shop
+        - descriptionTags
+        - number
+
