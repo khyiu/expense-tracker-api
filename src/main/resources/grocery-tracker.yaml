@@ -29,6 +29,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/GroceryLineRequest'
+        required: true
       responses:
         201:
           description: Grocery line has been properly registered
