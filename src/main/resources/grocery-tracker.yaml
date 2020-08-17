@@ -45,7 +45,6 @@ components:
           type: number
         nbUnitPerPackage:
           type: number
-          default: 1
       required:
         - salesUnitType
         - quantity
