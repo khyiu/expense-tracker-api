@@ -37,6 +37,7 @@ components:
   schemas:
     SalesUnit:
       type: object
+      x-abstract: true
       properties:
         salesUnitType:
           type: string
@@ -103,9 +104,7 @@ components:
         unitPrice:
           type: number
         unitType:
-          oneOf:
-            - $ref: '#/components/schemas/WeightSalesUnit'
-            - $ref: '#/components/schemas/VolumeSalesUnit'
+          $ref: '#/components/schemas/SalesUnit'
       required:
         - date
         - shop
