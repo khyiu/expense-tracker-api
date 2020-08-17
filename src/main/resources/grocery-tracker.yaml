@@ -9,6 +9,7 @@ servers:
 paths:
   /shops:
     get:
+      operationId: getShops
       summary: Get existing shops
       description: Retrieve a list of the shops in which grocery lines have been previsously registered
       responses:
@@ -22,6 +23,7 @@ paths:
           description: List of existing shops
   /grocery-lines:
     post:
+      operationId: registerGroceryLine
       summary: Registers a grocery line.
       description: Registers a grocery item that has been shopped, along with information such as descriptions tags, sales unit and price.
       requestBody:
