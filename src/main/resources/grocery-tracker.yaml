@@ -54,6 +54,7 @@ components:
         propertyName: salesUnitType
         mapping:
           weight: '#/components/schemas/WeightSalesUnit'
+          volume: '#/components/schemas/VolumeSalesUnit'
     WeightSalesUnit:
       allOf:
         - $ref: '#/components/schemas/SalesUnit'
