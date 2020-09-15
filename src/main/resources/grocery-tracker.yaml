@@ -6,12 +6,17 @@ info:
 servers:
   - url: 'http://grocery-tracker-back-8.eu-central-1.elasticbeanstalk.com/'
     description: Production environment
+tags:
+  - name: Purchase locations
+    description: Operations related to purchase locations
+  - name: Purchases
+    description: Operations related to grocery purchases
 paths:
-  /shops:
+  /purchaseLocations:
     get:
-      operationId: getShops
-      summary: Get existing shops
-      description: Retrieve a list of the shops in which grocery lines have been previsously registered
+      operationId: getPurchaseLocations
+      summary: Get existing purchase locations, that is, locations where at least one purchase has already been done.
+      description: Retrieve a list of the locations in which grocery purchases have been previsously registered.
       responses:
         200:
           content:
@@ -19,83 +24,68 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Shop'
-          description: List of existing shops
-  /grocery-lines:
+                  $ref: '#/components/schemas/PurchaseLocation'
+          description: List of existing purchase locations
+      tags:
+        - Purchase locations
+  /purchases:
     post:
-      operationId: registerGroceryLine
-      summary: Registers a grocery line.
-      description: Registers a grocery item that has been shopped, along with information such as descriptions tags, sales unit and price.
+      operationId: registerPurchase
+      summary: Registers a purchase.
+      description: Registers a purchase, along with information such as descriptions tags, sales unit and price.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GroceryLineRequest'
+              $ref: '#/components/schemas/PurchaseRequest'
         required: true
       responses:
         201:
           description: Grocery line has been properly registered
+      tags:
+        - Purchases
 components:
   schemas:
-    SalesUnit:
+    Packaging:
       type: object
-      x-abstract: true
       properties:
-        salesUnitType:
-          type: string
-        quantityPerUnit:
-          type: number
         nbUnitPerPackage:
           type: number
+          default: 1
+        unitMeasurements:
+          $ref: '#/components/schemas/UnitMeasurement'
+    UnitMeasurement:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [ml, cl, l, g, kg]
+        quantity:
+          type: number
       required:
-        - salesUnitType
+        - type
         - quantity
-      discriminator:
-        propertyName: salesUnitType
-        mapping:
-          weight: '#/components/schemas/WeightSalesUnit'
-          volume: '#/components/schemas/VolumeSalesUnit'
-    WeightSalesUnit:
-      allOf:
-        - $ref: '#/components/schemas/SalesUnit'
-        - type: object
-          properties:
-            weightUnit:
-              type: string
-              enum: [g, kg]
-          required:
-            - weightUnit
-    VolumeSalesUnit:
-      allOf:
-        - $ref: '#/components/schemas/SalesUnit'
-        - type: object
-          properties:
-            volumeUnit:
-              type: string
-              enum: [ml, cl, l]
-          required:
-            - volumeUnit
-    Shop:
+    PurchaseLocation:
       type: object
       properties:
         id:
           type: string
-        brand:
+        description:
           type: string
         locationTag:
           type: string
       required:
-        - brand
-        - location
-    GroceryLineRequest:
-      description: Request object representing the grocery line to be registered in the application
+        - description
+        - locationTag
+    PurchaseRequest:
+      description: Request object representing the purchase to be registered in the application
       type: object
       properties:
         date:
           type: string
           pattern: 'dddd-dd-dd'
-        shop:
-          $ref: '#/components/schemas/Shop'
+        location:
+          $ref: '#/components/schemas/PurchaseLocation'
         brand:
           type: string
         descriptionTags:
@@ -105,11 +95,11 @@ components:
           minimum: 1
         unitPrice:
           type: number
-        unitType:
-          $ref: '#/components/schemas/SalesUnit'
+        packaging:
+          $ref: '#/components/schemas/Packaging'
       required:
         - date
-        - shop
+        - location
         - descriptionTags
-        - number
+        - unitPrice
 
