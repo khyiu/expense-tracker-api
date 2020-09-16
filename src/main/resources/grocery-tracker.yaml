@@ -50,7 +50,7 @@ components:
       type: object
       properties:
         nbUnitPerPackage:
-          type: number
+          type: integer
           default: 1
         unitMeasurements:
           $ref: '#/components/schemas/UnitMeasurement'
