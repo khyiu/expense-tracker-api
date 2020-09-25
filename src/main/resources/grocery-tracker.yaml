@@ -59,12 +59,11 @@ components:
       properties:
         type:
           type: string
-          enum: [ml, cl, l, g, kg]
+          enum: [pc, ml, cl, l, g, kg]
+          default: pc
         quantity:
-          type: number
-      required:
-        - type
-        - quantity
+          type: integer
+          default: 1
     PurchaseLocation:
       type: object
       properties:
@@ -102,4 +101,17 @@ components:
         - location
         - descriptionTags
         - unitPrice
+        - packaging
+    Purchase:
+      description: Representation of a purchase that has been registered in the application
+      allOf:
+        - $ref: '#/components/schemas/PurchaseRequest'
+        - type: object
+          properties:
+            id:
+              type: string
+              description: ID following UUID format
+          required:
+            - id
+
 
