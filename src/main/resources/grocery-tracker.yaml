@@ -41,7 +41,11 @@ paths:
         required: true
       responses:
         201:
-          description: Grocery line has been properly registered
+          description: Purchase has been properly registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
       tags:
         - Purchases
 components:
