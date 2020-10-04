@@ -95,7 +95,7 @@ components:
           type: array
           items:
             type: string
-          minimum: 1
+          minItems: 1
         unitPrice:
           type: number
         packaging:
