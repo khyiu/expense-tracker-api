@@ -86,7 +86,7 @@ components:
       properties:
         date:
           type: string
-          pattern: 'dddd-dd-dd'
+          format: date
         location:
           $ref: '#/components/schemas/PurchaseLocation'
         brand:
