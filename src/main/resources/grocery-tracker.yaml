@@ -12,23 +12,33 @@ tags:
   - name: Purchases
     description: Operations related to grocery purchases
 paths:
-  /purchaseLocations:
+  /purchases:
     get:
-      operationId: getPurchaseLocations
-      summary: Get existing purchase locations, that is, locations where at least one purchase has already been done.
-      description: Retrieve a list of the locations in which grocery purchases have been previsously registered.
+      operationId: getPurchases
+      summary: Fetch registered purchases.
+      description: Retrieve in a paginated way, purchases that have been registered in the system and that are associated to the current user.
+      parameters:
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+          required: true
+          description: Index of the result page to retrieve.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+          description: Maximum number of result item per retrieved page.
       responses:
         200:
+          description: Purchases associated to the current user have been retrieved
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PurchaseLocation'
-          description: List of existing purchase locations
-      tags:
-        - Purchase locations
-  /purchases:
+                  $ref: '#/components/schemas/Purchase'
     post:
       operationId: registerPurchase
       summary: Registers a purchase.
