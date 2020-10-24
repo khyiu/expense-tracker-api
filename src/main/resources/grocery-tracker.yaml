@@ -134,10 +134,10 @@ components:
           type: number
         totalPages:
           description: total number of pages based on the current page size
-          type: number
+          type: integer
         number:
           description: index of current page
-          type: number
+          type: integer
         content:
           type: array
           items:
