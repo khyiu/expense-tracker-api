@@ -131,7 +131,7 @@ components:
       properties:
         totalElements:
           description: total number of purchases associated to current user
-          type: number
+          type: integer
         totalPages:
           description: total number of pages based on the current page size
           type: integer
