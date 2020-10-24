@@ -38,7 +38,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Purchase'
+                  $ref: '#/components/schemas/PurchasesResponse'
     post:
       operationId: registerPurchase
       summary: Registers a purchase.
@@ -73,7 +73,7 @@ components:
       properties:
         type:
           type: string
-          enum: [pc, ml, cl, l, g, kg]
+          enum: [ pc, ml, cl, l, g, kg ]
           default: pc
         quantity:
           type: integer
@@ -127,5 +127,26 @@ components:
               description: ID following UUID format
           required:
             - id
-
+    PurchasesResponse:
+      description: Page of purchases that have been registered in the application
+      type: object
+      properties:
+        totalElements:
+          description: total number of purchases associated to current user
+          type: number
+        totalPages:
+          description: total number of pages based on the current page size
+          type: number
+        number:
+          description: index of current page
+          type: number
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Purchase'
+      required:
+        - totalElements
+        - totalPages
+        - number
+        - content
 
