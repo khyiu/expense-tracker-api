@@ -56,6 +56,22 @@ paths:
                 $ref: '#/components/schemas/Purchase'
       tags:
         - Purchases
+  /purchase/{purchaseId}:
+    delete:
+      summary: Delete a registered purchase
+      operationId: deletePurchase
+      parameters:
+        - in: path
+          name: purchaseId
+          schema:
+            type: string
+          required: true
+          description: Identifier of the purchase to be deleted
+      responses:
+        200:
+          description: Purchase with given ID has been properly deleted from application
+      tags:
+        - Purchases
 components:
   schemas:
     Packaging:
