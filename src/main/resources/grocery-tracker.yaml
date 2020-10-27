@@ -7,10 +7,10 @@ servers:
   - url: 'http://grocery-tracker-back-8.eu-central-1.elasticbeanstalk.com/'
     description: Production environment
 tags:
-  - name: Purchase locations
-    description: Operations related to purchase locations
   - name: Purchases
-    description: Operations related to grocery purchases
+    description: Operations related to set of purchases
+  - name: Purchase
+    description: Operations related to single purchase
 paths:
   /purchases:
     get:
@@ -72,6 +72,31 @@ paths:
           description: Purchase with given ID has been properly deleted from application
       tags:
         - Purchases
+    put:
+      summary: Update a registered purchase
+      operationId: updatePurchase
+      parameters:
+        - in: path
+          name: purchaseId
+          schema:
+            type: string
+          required: true
+          description: Identifier of the purchase to be updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseRequest'
+        required: true
+      responses:
+        201:
+          description: Purchase has been properly updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+      tags:
+        - Purchase
 components:
   schemas:
     Packaging:
