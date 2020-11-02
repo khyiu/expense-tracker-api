@@ -11,9 +11,29 @@ tags:
     description: Operations related to set of purchases
   - name: Purchase
     description: Operations related to single purchase
+  - name: PurchaseLocations
+    description: Operations related to purchase locations
 paths:
+  /purchaseLocations:
+    get:
+      tags:
+        - PurchaseLocations
+      operationId: getPurchaseLocations
+      summary: Fetch locations at which at least one purchase has previously been done
+      description: Retrieve in a non-paginated way, purchase locations
+      responses:
+        200:
+          description: List of locations at which purchases have been done
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurchaseLocation'
   /purchases:
     get:
+      tags:
+        - Purchases
       operationId: getPurchases
       summary: Fetch registered purchases.
       description: Retrieve in a paginated way, purchases that have been registered in the system and that are associated to the current user.
@@ -38,6 +58,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/PurchasesResponse'
     post:
+      tags:
+        - Purchases
       operationId: registerPurchase
       summary: Registers a purchase.
       description: Registers a purchase, along with information such as descriptions tags, sales unit and price.
@@ -54,10 +76,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Purchase'
-      tags:
-        - Purchases
   /purchase/{purchaseId}:
     delete:
+      tags:
+        - Purchase
       summary: Delete a registered purchase
       operationId: deletePurchase
       parameters:
@@ -70,9 +92,9 @@ paths:
       responses:
         200:
           description: Purchase with given ID has been properly deleted from application
-      tags:
-        - Purchases
     put:
+      tags:
+        - Purchase
       summary: Update a registered purchase
       operationId: updatePurchase
       parameters:
@@ -95,8 +117,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Purchase'
-      tags:
-        - Purchase
 components:
   schemas:
     Packaging:
