@@ -11,58 +11,14 @@ tags:
     description: Operations related to set of purchases
   - name: Purchase
     description: Operations related to single purchase
-  - name: PurchaseLocations
-    description: Operations related to purchase locations
 paths:
-  /purchaseLocations:
-    get:
-      tags:
-        - PurchaseLocations
-      operationId: getPurchaseLocations
-      summary: Fetch locations at which at least one purchase has previously been done
-      description: Retrieve in a non-paginated way, purchase locations
-      responses:
-        200:
-          description: List of locations at which purchases have been done
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PurchaseLocation'
   /purchases:
-    get:
-      tags:
-        - Purchases
-      operationId: getPurchases
-      summary: Fetch registered purchases.
-      description: Retrieve in a paginated way, purchases that have been registered in the system and that are associated to the current user.
-      parameters:
-        - in: query
-          name: pageNumber
-          schema:
-            type: integer
-          required: true
-          description: Index of the result page to retrieve.
-        - in: query
-          name: pageSize
-          schema:
-            type: integer
-          required: true
-          description: Maximum number of result item per retrieved page.
-      responses:
-        200:
-          description: Purchases associated to the current user have been retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PurchasesResponse'
     post:
       tags:
         - Purchases
       operationId: registerPurchase
       summary: Registers a purchase.
-      description: Registers a purchase, along with information such as descriptions tags, sales unit and price.
+      description: Registers a purchase, along with purchased items and the shop in which the purchase has been made.
       requestBody:
         content:
           application/json:
@@ -75,48 +31,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Purchase'
-  /purchase/{purchaseId}:
-    delete:
-      tags:
-        - Purchase
-      summary: Delete a registered purchase
-      operationId: deletePurchase
-      parameters:
-        - in: path
-          name: purchaseId
-          schema:
-            type: string
-          required: true
-          description: Identifier of the purchase to be deleted
-      responses:
-        200:
-          description: Purchase with given ID has been properly deleted from application
-    put:
-      tags:
-        - Purchase
-      summary: Update a registered purchase
-      operationId: updatePurchase
-      parameters:
-        - in: path
-          name: purchaseId
-          schema:
-            type: string
-          required: true
-          description: Identifier of the purchase to be updated
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PurchaseRequest'
-        required: true
-      responses:
-        201:
-          description: Purchase has been properly updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Purchase'
+                $ref: '#/components/schemas/PurchaseResponse'
 components:
   schemas:
     Packaging:
@@ -127,6 +42,7 @@ components:
           default: 1
         unitMeasurements:
           $ref: '#/components/schemas/UnitMeasurement'
+
     UnitMeasurement:
       type: object
       properties:
@@ -137,18 +53,40 @@ components:
         quantity:
           type: integer
           default: 1
-    PurchaseLocation:
+
+    Shop:
+      description: Shop in which a purchase has been made
       type: object
       properties:
-        id:
+        name:
           type: string
-        description:
-          type: string
-        locationTag:
+        location:
           type: string
       required:
-        - description
-        - locationTag
+        - name
+        - location
+
+    PurchaseItem:
+      description: Item that has been purchased as part of a purchase
+      type: object
+      properties:
+        brand:
+          type: string
+        productTags:
+          type: array
+          items:
+            type: string
+            minItems: 1
+        price:
+          type: number
+        packaging:
+          $ref: '#/components/schemas/Packaging'
+      required:
+        - brand
+        - productTags
+        - price
+        - packaging
+
     PurchaseRequest:
       description: Request object representing the purchase to be registered in the application
       type: object
@@ -156,56 +94,28 @@ components:
         date:
           type: string
           format: date
-        location:
-          $ref: '#/components/schemas/PurchaseLocation'
-        brand:
-          type: string
-        descriptionTags:
+        shop:
+          $ref: '#/components/schemas/Shop'
+        amount:
+          type: number
+        items:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/PurchaseItem'
           minItems: 1
-        unitPrice:
-          type: number
-        packaging:
-          $ref: '#/components/schemas/Packaging'
       required:
         - date
-        - location
-        - descriptionTags
-        - unitPrice
-        - packaging
-    Purchase:
-      description: Representation of a purchase that has been registered in the application
+        - shop
+        - amount
+        - items
+
+    PurchaseResponse:
+      description: Representation of a purchase that has been persisted in the system.
       allOf:
         - $ref: '#/components/schemas/PurchaseRequest'
         - type: object
           properties:
             id:
-              type: string
-              description: ID following UUID format
+              type: integer
           required:
             - id
-    PurchasesResponse:
-      description: Page of purchases that have been registered in the application
-      type: object
-      properties:
-        totalElements:
-          description: total number of purchases associated to current user
-          type: integer
-        totalPages:
-          description: total number of pages based on the current page size
-          type: integer
-        number:
-          description: index of current page
-          type: integer
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/Purchase'
-      required:
-        - totalElements
-        - totalPages
-        - number
-        - content
-
