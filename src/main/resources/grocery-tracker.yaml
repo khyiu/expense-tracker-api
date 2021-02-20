@@ -77,14 +77,17 @@ components:
           items:
             type: string
             minItems: 1
-        price:
+        unitPrice:
           type: number
+        nbUnit:
+          type: integer
         packaging:
           $ref: '#/components/schemas/Packaging'
       required:
         - brand
         - productTags
-        - price
+        - unitPrice
+        - nbUnit
         - packaging
 
     PurchaseRequest:
