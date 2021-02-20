@@ -81,6 +81,7 @@ components:
           type: number
         nbUnit:
           type: integer
+          minimum: 1
         packaging:
           $ref: '#/components/schemas/Packaging'
       required:
