@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: Persistence data model
+  description: Definitions of data structures that are persisted to and read from the DynamoDB database
+  version: 1.0.0-SNAPSHOT
+paths: {}
+components:
+  schemas:
+    PurchaseItemEntity:
+      type: object
+      properties:
+        ownr:
+          type: string
+        creationTimestamp:
+          type: string
+        brand:
+          type: string
+        descriptionTags:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        unitPrice:
+          type: number
+          minimum: 0.01
+        nbUnit:
+          type: integer
+          minimum: 1
+        packaging:
+          type: object
+          properties:
+            nbUnitPerPackage:
+              type: integer
+              minimum: 1
+            measureUnit:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: [pieces, ml, cl, l, mg, g, kg]
+                quantity:
+                  type: number
+              required:
+                - type
+                - quantity
+          required:
+            - nbUnitPerPackage
+      required:
+        - ownr
+        - creationTimestamp
+        - brand
+        - descriptionTags
+        - unitPrice
+        - nbUnit
