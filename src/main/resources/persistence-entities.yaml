@@ -3,7 +3,7 @@ info:
   title: Persistence data model
   description: Definitions of data structures that are persisted to and read from the DynamoDB database
   version: 1.0.0-SNAPSHOT
-paths: {}
+paths: { }
 components:
   schemas:
     PurchaseItemEntity:
@@ -37,7 +37,7 @@ components:
               properties:
                 type:
                   type: string
-                  enum: [pieces, ml, cl, l, mg, g, kg]
+                  enum: [ pieces, ml, cl, l, mg, g, kg ]
                 quantity:
                   type: number
               required:
@@ -52,3 +52,34 @@ components:
         - descriptionTags
         - unitPrice
         - nbUnit
+    Purchase:
+      type: object
+      properties:
+        ownr:
+          type: string
+        creationTimestamp:
+          type: string
+        shop:
+          type: object
+          properties:
+            name:
+              type: string
+            location:
+              type: string
+          required:
+            - name
+            - location
+        amount:
+          type: number
+          minimum: 0.01
+        items:
+          type: array
+          items:
+            type: string
+          minItems: 1
+      required:
+        - ownr
+        - creationTimestamp
+        - shop
+        - amount
+        - items
