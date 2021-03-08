@@ -6,7 +6,7 @@ info:
 paths: { }
 components:
   schemas:
-    PurchaseItemEntity:
+    PurchaseItem:
       type: object
       properties:
         ownr:
