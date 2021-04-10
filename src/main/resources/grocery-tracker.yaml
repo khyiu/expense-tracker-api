@@ -17,7 +17,7 @@ paths:
       tags:
         - Purchases
       operationId: registerPurchase
-      summary: Registers a purchase.
+      summary: Register a purchase.
       description: Registers a purchase, along with purchased items and the shop in which the purchase has been made.
       requestBody:
         content:
@@ -32,6 +32,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PurchaseResponse'
+    get:
+      tags:
+        - Purchases
+      operationId: fetchPurchases
+      summary: Fetch registered purchases
+      description: Retrieve current user's purchases in a paginated-fashion.
+      parameters:
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+          description: Number of items to be returned per result page
+        - in: query
+          name: exclusiveBoundKey
+          schema:
+            type: integer
+            description: Key that identifies the last item of a given result page, and is used to calculate what are the items
+            of the next page
+        - in: query
+          name: sortDirection
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+          required: true
+          description: Sorting order of result items
+      responses:
+        200:
 components:
   schemas:
     Packaging:
