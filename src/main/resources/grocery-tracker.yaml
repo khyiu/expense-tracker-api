@@ -49,8 +49,7 @@ paths:
           name: exclusiveBoundKey
           schema:
             type: integer
-            description: Key that identifies the last item of a given result page, and is used to calculate what are the items
-            of the next page
+            description: Key that identifies the last item of a given result page, and is used to calculate what are the items  of the next page
         - in: query
           name: sortDirection
           schema:
@@ -62,6 +61,13 @@ paths:
           description: Sorting order of result items
       responses:
         200:
+          description: Page of registered purchases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurchaseResponse'
 components:
   schemas:
     Packaging:
@@ -147,6 +153,22 @@ components:
       description: Representation of a purchase that has been persisted in the system.
       allOf:
         - $ref: '#/components/schemas/PurchaseRequest'
+        - type: object
+          properties:
+            id:
+              type: integer
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/PurchaseItemResponse'
+              minItems: 1
+          required:
+            - id
+
+    PurchaseItemResponse:
+      description: Representation of a purchase item that has been registered in the system.
+      allOf:
+        - $ref: '#/components/schemas/PurchaseItem'
         - type: object
           properties:
             id:
