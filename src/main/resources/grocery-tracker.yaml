@@ -68,6 +68,23 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PurchaseResponse'
+  /purchases/{creationTimestamp}:
+    delete:
+      tags:
+        - Purchases
+      operationId: deletePurchase
+      summary: Delete a purchase
+      description: Delete the specified purchase along with its associated purchase items
+      parameters:
+        - in: path
+          name: creationTimestamp
+          schema:
+            type: integer
+          required: true
+          description: creationTimestamp that is used to uniquely identified the purchase to delete
+      responses:
+        200:
+          description: Purchase has been successfully deleted
 components:
   schemas:
     Packaging:
