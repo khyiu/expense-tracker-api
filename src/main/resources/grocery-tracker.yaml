@@ -69,6 +69,26 @@ paths:
                 items:
                   $ref: '#/components/schemas/PurchaseResponse'
   /purchases/{creationTimestamp}:
+    get:
+      tags:
+        - Purchases
+      operationId: getPurchase
+      summary: Fetch a certain purchase
+      description: Fetch the specified purchase along with its associated purchase items
+      parameters:
+        - in: path
+          name: creationTimestamp
+          schema:
+            type: integer
+          required: true
+          description: creationTimestamp that is used to uniquely identified the purchase to delete
+      responses:
+        200:
+          description: Retrieved purchase
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseResponse'
     delete:
       tags:
         - Purchases
