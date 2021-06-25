@@ -1,0 +1,164 @@
+openapi: 3.0.3
+info:
+  title: Expense Tracker API
+  description: Definition of available methods to interact with the Expense Tracker application back-end.
+  version: 1.0.0-SNAPSHOT
+servers:
+  - url: 'http://grocery-tracker-back-8.eu-central-1.elasticbeanstalk.com/'
+    description: Production environment
+tags:
+  - name: Purchases
+    description: Operations related to set of purchases
+  - name: Purchase
+    description: Operations related to single purchase
+paths:
+  /expenses:
+    post:
+      tags:
+        - Expenses
+      operationId: registerExpense
+      summary: Register an expense.
+      description: Registers an expense
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseRequest'
+        required: true
+      responses:
+        201:
+          description: Expense has been properly registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseResponse'
+        401:
+          description: User isn't authenticated
+        403:
+          description: User does not belong to the appropriate user groups
+    get:
+      tags:
+        - Expenses
+      operationId: fetchExpenses
+      summary: Fetch registered expenses
+      description: Retrieve current user's expenses in a paginated-fashion.
+      parameters:
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+          description: Number of items to be returned per result page
+        - in: query
+          name: exclusiveBoundKey
+          schema:
+            type: integer
+            description: Key that identifies the last item of a given result page, and is used to calculate what are the items  of the next page
+        - in: query
+          name: sortDirection
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+          required: true
+          description: Sorting order of result items
+      responses:
+        200:
+          description: Page of registered expenses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExpenseResponse'
+        401:
+          description: User isn't authenticated
+        403:
+          description: User does not belong to the appropriate user groups
+  /expenses/{id}:
+    get:
+      tags:
+        - Expenses
+      operationId: getExpense
+      summary: Fetch a certain expense
+      description: Fetch the expense that is identitied by `id` and belongs to the current user
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: identifier of the expense to be retrieved
+      responses:
+        200:
+          description: Retrieved expense
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseResponse'
+        401:
+          description: User isn't authenticated
+        403:
+          description: User does not belong to the appropriate user groups
+        404:
+          description: The specified expense does not exist
+    delete:
+      tags:
+        - Expenses
+      operationId: deleteExpense
+      summary: Delete an expense
+      description: Delete the specified expense
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: identifier of the expense to delete
+      responses:
+        200:
+          description: Expense has been successfully deleted
+        401:
+          description: User isn't authenticated
+        403:
+          description: User does not belong to the appropriate user groups
+        404:
+          description: The specified expense does not exist
+components:
+  schemas:
+    ExpenseRequest:
+      description: Request object representing an expense to be registered in the application
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        amount:
+          type: number
+        tags:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        description:
+          type: string
+        creditCard:
+          type: boolean
+        creditCardPaid:
+          type: boolean
+      required:
+        - date
+        - amount
+        - tags
+
+    ExpenseResponse:
+      description: Representation of an expense that has been persisted in the system.
+      allOf:
+        - $ref: '#/components/schemas/ExpenseRequest'
+        - type: object
+          properties:
+            id:
+              type: integer
+          required:
+            - id

@@ -1,2 +1,2 @@
-# grocery-tracker-api
-API definition for Grocery Tracker application
+# expense-tracker-api
+API definition for Expense Tracker application
