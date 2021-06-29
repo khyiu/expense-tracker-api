@@ -87,7 +87,7 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           required: true
           description: identifier of the expense to be retrieved
       responses:
@@ -159,6 +159,6 @@ components:
         - type: object
           properties:
             id:
-              type: integer
+              type: string
           required:
             - id
