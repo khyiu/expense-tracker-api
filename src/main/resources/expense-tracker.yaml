@@ -113,7 +113,7 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           required: true
           description: identifier of the expense to delete
       responses:
