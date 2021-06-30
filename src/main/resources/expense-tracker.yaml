@@ -52,7 +52,7 @@ paths:
         - in: query
           name: exclusiveBoundKey
           schema:
-            type: integer
+            type: string
             description: Key that identifies the last item of a given result page, and is used to calculate what are the items  of the next page
         - in: query
           name: sortDirection
